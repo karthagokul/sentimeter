@@ -1,13 +1,16 @@
 import speech_recognition as sr 
 import os 
 from threading import Thread
+from emotion_engine import EmotionChecker
 
-class LiveSpeech:
+
+class IntelliSpeech:
     entries=[]
     def __init__(self) -> None:
         self.recognizer = sr.Recognizer()
         self.lang = 'en-IN'
         self.threads = []
+        self.emotion_engine = EmotionChecker()
 
     def speech_to_text(self,audio_data):
         try:
@@ -16,7 +19,8 @@ class LiveSpeech:
             print("Google Speech Recognition could not understand audio")
         except sr.RequestError as e:
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
-        
+        if len(actual_result) == 0:
+            return False
         #Lets get the best text
         if "confidence" in actual_result["alternative"]:
             # return alternative with highest confidence score
@@ -24,20 +28,29 @@ class LiveSpeech:
         else:
             # when there is no confidence available, we arbitrarily choose the first hypothesis.
             best_hypothesis = actual_result["alternative"][0]
-        self.entries.append(best_hypothesis["transcript"])
-        print(self.entries)
+        result=best_hypothesis["transcript"]
+        emotion_results=self.emotion_engine.process(result)
+        self.entries.append(result)
+        #print(self.entries)
+        print(result)
+        print(emotion_results)
+
         return True
 
     def listen(self):
+        print("listening")
         while True:
             with sr.Microphone() as source:
                 # read the audio data from the default microphone
-                print("listening")
                 audio_data = self.recognizer.record(source, duration=5)
                 process = Thread(target=self.speech_to_text, args=[audio_data])
                 process.start()
                 self.threads.append(process)
 
     def __del__(self):
+        self.stop()
+
+    def stop(self):
         for process in self.threads:
             process.join()
+    

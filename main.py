@@ -1,5 +1,5 @@
-from livespeech import LiveSpeech
+from intelli_speech import IntelliSpeech
 
 if __name__ == "__main__":
-    listener =LiveSpeech()
+    listener =IntelliSpeech()
     listener.listen()
