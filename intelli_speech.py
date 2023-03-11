@@ -32,6 +32,7 @@ class IntelliSpeech:
         result=best_hypothesis["transcript"]
         emotion_results=self.emotion_engine.process(result)
         self.entries.append(result)
+        sentiqueue.add_text(result)
         #print(self.entries)
         #print(result)
         #print(emotion_results)
@@ -39,7 +40,6 @@ class IntelliSpeech:
         return True
 
     def listen(self):
-        print("listening")
         while True:
             with sr.Microphone() as source:
                 # read the audio data from the default microphone

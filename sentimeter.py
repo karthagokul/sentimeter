@@ -5,6 +5,7 @@ import time
 
 from threading import Thread
 from time import sleep
+import re, sys
 
 class Sentimeter:
     listener =IntelliSpeech()
@@ -15,12 +16,13 @@ class Sentimeter:
     
     def print(self):
         while self.active:
+            print(sentiqueue.text_buffer)
             print(sentiqueue.emotions_average)
-            sleep(2)
+            sleep(5)
 
     def start(self):
         self.active=True
-        self.display_timer =Thread(target=self.print).start()
+        self.display_timer=Thread(target=self.print).start()
         self.listener.listen()
 
     def stop(self):

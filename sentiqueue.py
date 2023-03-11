@@ -8,7 +8,13 @@ emotions_average["Angry"]=0
 emotions_average["Surprise"]=0
 emotions_average["Sad"]=0
 emotions_average["Fear"]=0
+text_buffer=""
 
+def add_text(text):
+    global threadLock
+    global text_buffer
+    with threadLock:
+        text_buffer+=text
 
 def queue_emotions(entry):
     global threadLock
