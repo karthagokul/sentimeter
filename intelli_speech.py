@@ -2,15 +2,16 @@ import speech_recognition as sr
 import os 
 from threading import Thread
 from emotion_engine import EmotionChecker
-
+import sentiqueue
 
 class IntelliSpeech:
     entries=[]
+    lang = 'en-IN'
+    threads=[]
+    recognizer = sr.Recognizer()
+    emotion_engine = EmotionChecker()
     def __init__(self) -> None:
-        self.recognizer = sr.Recognizer()
-        self.lang = 'en-IN'
-        self.threads = []
-        self.emotion_engine = EmotionChecker()
+        pass
 
     def speech_to_text(self,audio_data):
         try:
@@ -32,9 +33,9 @@ class IntelliSpeech:
         emotion_results=self.emotion_engine.process(result)
         self.entries.append(result)
         #print(self.entries)
-        print(result)
-        print(emotion_results)
-
+        #print(result)
+        #print(emotion_results)
+        sentiqueue.queue_emotions(emotion_results)
         return True
 
     def listen(self):
