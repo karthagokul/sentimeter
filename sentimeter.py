@@ -7,13 +7,21 @@ from threading import Thread
 from time import sleep
 import re, sys
 
+
 class Sentimeter:
-    listener =IntelliSpeech()
-    display_timer=None
-    active=True
+    listener = IntelliSpeech()
+    display_timer = None
+    active = True
+
     def __init__(self) -> None:
         pass
-    
+
+    def process_text(self, text_data):
+        pass
+
+    def process_text_file(self, file_name):
+        pass
+
     def print(self):
         while self.active:
             print(sentiqueue.text_buffer)
@@ -21,11 +29,11 @@ class Sentimeter:
             sleep(5)
 
     def start(self):
-        self.active=True
-        self.display_timer=Thread(target=self.print).start()
+        self.active = True
+        self.display_timer = Thread(target=self.print).start()
         self.listener.listen()
 
     def stop(self):
-        self.active=False
+        self.active = False
         self.listener.stop()
         pass
