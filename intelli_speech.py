@@ -1,8 +1,7 @@
 import speech_recognition as sr
 import os
 from threading import Thread
-from emotion_engine import EmotionChecker
-import sentiqueue
+import emotions_engine
 
 
 class IntelliSpeech:
@@ -10,7 +9,6 @@ class IntelliSpeech:
     lang = "en-IN"
     threads = []
     recognizer = sr.Recognizer()
-    emotion_engine = EmotionChecker()
 
     def __init__(self) -> None:
         pass
@@ -23,13 +21,10 @@ class IntelliSpeech:
         except sr.UnknownValueError:
             print("Google Speech Recognition could not understand audio")
         except sr.RequestError as e:
-            print(
-                "Could not request results from Google Speech Recognition service; {0}".format(
-                    e
-                )
-            )
+            print("Error service; {0}".format(e))
         if len(actual_result) == 0:
             return False
+
         # Lets get the best text
         if "confidence" in actual_result["alternative"]:
             # return alternative with highest confidence score
@@ -41,13 +36,7 @@ class IntelliSpeech:
             # when there is no confidence available, we arbitrarily choose the first hypothesis.
             best_hypothesis = actual_result["alternative"][0]
         result = best_hypothesis["transcript"]
-        emotion_results = self.emotion_engine.process(result)
-        self.entries.append(result)
-        sentiqueue.add_text(result)
-        # print(self.entries)
-        # print(result)
-        # print(emotion_results)
-        sentiqueue.queue_emotions(emotion_results)
+        emotions_engine.engine.process_text(result)
         return True
 
     def listen(self):

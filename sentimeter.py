@@ -1,20 +1,17 @@
 from intelli_speech import IntelliSpeech
-import sentiqueue
-import random
-import time
-
+import emotions_engine
+from emotions_engine import EmotionsEngine
 from threading import Thread
 from time import sleep
-import re, sys
 
 
 class Sentimeter:
     listener = IntelliSpeech()
     display_timer = None
-    active = True
+    active = False
 
     def __init__(self) -> None:
-        pass
+        emotions_engine.engine.run()
 
     def process_text(self, text_data):
         pass
@@ -24,16 +21,19 @@ class Sentimeter:
 
     def print(self):
         while self.active:
-            print(sentiqueue.text_buffer)
-            print(sentiqueue.emotions_average)
+            emotions_engine.eqbank.print()
             sleep(5)
 
-    def start(self):
+    def start_listening(self):
+        if self.active:
+            print("Another Listening is Ongoing")
+            return
         self.active = True
-        self.display_timer = Thread(target=self.print).start()
+        # self.display_timer = Thread(target=self.print).start()
         self.listener.listen()
 
     def stop(self):
-        self.active = False
-        self.listener.stop()
-        pass
+        emotions_engine.engine.stop()
+        if self.active:
+            self.active = False
+            self.listener.stop()
