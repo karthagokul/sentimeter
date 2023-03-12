@@ -1,5 +1,5 @@
 # sentimeter
-Reading the Emotions From Text
+Reading the Emotions From Text / Youtube video or live speech
 
 
 ## Setup
