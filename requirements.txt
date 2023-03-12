@@ -3,4 +3,6 @@ pydub
 emoji==1.6.3
 text2emotion
 rich
+click
+black
 pyaudio #Need to explictly install sudo apt-get install python-pyaudio python3-pyaudio in case of Linux
