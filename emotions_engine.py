@@ -13,13 +13,13 @@ class EmotionsBank:
     emotions_average["Surprise"] = 0
     emotions_average["Sad"] = 0
     emotions_average["Fear"] = 0
-    text_buffer = []
+    text_buffer = ""
     threadLock = threading.Lock()
 
     def deposit(self, text, entry):
         with self.threadLock:
             self.emotions_counter += 1
-            self.text_buffer.append(text)
+            self.text_buffer +=" " +text 
             self.emotions_average["Happy"] = (
                 self.emotions_average["Happy"] + entry["Happy"]
             )

@@ -3,17 +3,13 @@ import emotions_engine
 from emotions_engine import EmotionsEngine
 from threading import Thread
 from time import sleep
-import time
-from rich.live import Live
-from rich.table import Table
-from rich import print
-from rich.panel import Panel
-
+from sentimeter_ui import SentimeterUI
 
 class Sentimeter:
     listener = IntelliSpeech()
     display_timer = None
     active = False
+    ui = SentimeterUI()
 
     def __init__(self) -> None:
         emotions_engine.engine.run()
@@ -32,25 +28,11 @@ class Sentimeter:
         self.active = True
         self.display_timer = Thread(target=self.print).start()
 
-    def __print_table(self):
-        table = Table()
-        table.add_column("Row ID")
-        table.add_column("Description")
-        table.add_column("Level")
-
-        with Live(table, refresh_per_second=4) as live:  # update 4 times a second to feel fluid
-            for row in range(12):
-                live.console.print(f"Working on row #{row}")
-                time.sleep(0.4)
-                table.add_row(f"{row}", f"description {row}", "[red]ERROR")
-
     def print(self):
-        # Create a basic Rich layout
-        print(Panel("Hello, [red]World!"))
         while self.active:
             sleep(5)
-            self.__print_table()
-            #emotions_engine.engine.bank.print()
+            self.ui.update_emotions(emotions_engine.engine.bank.emotions_average)
+            self.ui.update_transcript(emotions_engine.engine.bank.text_buffer)
 
     def start_listening(self):
         if self.active:
