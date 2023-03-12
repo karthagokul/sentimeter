@@ -16,7 +16,6 @@ class IntelliSpeech:
         pass
 
     def speech_to_text(self, audio_data):
-        print("speech to text ")
         try:
             actual_result = self.recognizer.recognize_google(
                 audio_data, language=self.lang, show_all=True
@@ -39,7 +38,6 @@ class IntelliSpeech:
             # when there is no confidence available, we arbitrarily choose the first hypothesis.
             best_hypothesis = actual_result["alternative"][0]
         result = best_hypothesis["transcript"]
-        print(result)
         emotions_engine.engine.process_text(result)
         return True
 

@@ -35,6 +35,7 @@ class EmotionsBank:
             )
 
     def print(self):
+        print("Number of Threads ",threading.active_count() )
         print(self.text_buffer)
         print(self.emotions_average)
 
@@ -43,6 +44,7 @@ class EmotionsEngine:
     item_queue = queue.Queue()
     active = False
     bank = EmotionsBank()
+
     def stop(self):
         self.active = False
 
@@ -60,10 +62,8 @@ class EmotionsEngine:
             if self.item_queue.empty():
                 continue
             text = self.item_queue.get()
-            print("process emotions " + text)
             emotion_results = te.get_emotion(text)
             self.bank.deposit(text, emotion_results)
-            self.bank.print()
 
 # global data instance
 engine = EmotionsEngine()
