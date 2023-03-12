@@ -23,6 +23,7 @@ def main(live, text, audio_file, text_file):
         app.process_text(text)
     elif audio_file != None:
         print("Process audio file")
+        app.process_audio_file(audio_file)
     elif text_file != None:
         print("Process text file")
     return

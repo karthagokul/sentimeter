@@ -13,13 +13,13 @@ class EmotionsBank:
     emotions_average["Surprise"] = 0
     emotions_average["Sad"] = 0
     emotions_average["Fear"] = 0
-    text_buffer = ""
+    text_buffer = []
     threadLock = threading.Lock()
 
     def deposit(self, text, entry):
         with self.threadLock:
             self.emotions_counter += 1
-            self.text_buffer += "\n" + text
+            self.text_buffer.append(text)
             self.emotions_average["Happy"] = (
                 self.emotions_average["Happy"] + entry["Happy"]
             )
@@ -42,7 +42,7 @@ class EmotionsBank:
 class EmotionsEngine:
     item_queue = queue.Queue()
     active = False
-
+    bank = EmotionsBank()
     def stop(self):
         self.active = False
 
@@ -56,17 +56,15 @@ class EmotionsEngine:
 
     def __process_in_background(self):
         while self.active:
-            print("Processing Emotions")
-            sleep(1)
+            sleep(5)
             if self.item_queue.empty():
                 continue
             text = self.item_queue.get()
+            print("process emotions " + text)
             emotion_results = te.get_emotion(text)
-            eqbank.deposit(text, emotion_results)
-            eqbank.print()
-
+            self.bank.deposit(text, emotion_results)
+            self.bank.print()
 
 # global data instance
-eqbank = EmotionsBank()
 engine = EmotionsEngine()
 # global end

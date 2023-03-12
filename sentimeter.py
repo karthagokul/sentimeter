@@ -19,17 +19,20 @@ class Sentimeter:
     def process_text_file(self, file_name):
         pass
 
+    def process_audio_file(self,file_name):
+        self.listener.process_audio_file(file_name)
+
     def print(self):
         while self.active:
-            emotions_engine.eqbank.print()
             sleep(5)
+            emotions_engine.engine.bank.print()
 
     def start_listening(self):
         if self.active:
             print("Another Listening is Ongoing")
             return
         self.active = True
-        # self.display_timer = Thread(target=self.print).start()
+        self.display_timer = Thread(target=self.print).start()
         self.listener.listen()
 
     def stop(self):
