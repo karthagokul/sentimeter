@@ -7,13 +7,12 @@ from pydub import AudioSegment
 from pydub.silence import split_on_silence
 
 class IntelliSpeech:
-    entries = []
-    lang = "en-IN"
-    threads = []
-    recognizer = sr.Recognizer()
-
+    
     def __init__(self) -> None:
-        pass
+        self.recognizer = sr.Recognizer()
+        self.entries = []
+        self.lang = "en-IN"
+        self.threads = []
 
     def speech_to_text(self, audio_data):
         try:

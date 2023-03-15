@@ -4,8 +4,30 @@ import sys
 import text2emotion as te
 from time import sleep
 
+class EngineObserver:
+    def __init__(self, name):
+        print("New Subscriber is getting created " + name)
+        self.name = name
+    def update(self, message,emotions):
+        pass
 
-class EmotionsBank:
+class EnginePublisher:
+    subscribers=[]
+    def __init__(self):
+        pass
+
+    def register(self, who):
+        print("Registering Observer ")
+        self.subscribers.append(who)
+    def unregister(self, who):
+        self.subscribers.remove(who)
+
+    def dispatch(self, text,emotions):
+        for subscriber in self.subscribers:
+            subscriber.update(text,emotions)
+
+
+class EmotionsBank (EnginePublisher):
     emotions_counter = 0
     emotions_average = {}
     emotions_average["Happy"] = 0
@@ -14,7 +36,10 @@ class EmotionsBank:
     emotions_average["Sad"] = 0
     emotions_average["Fear"] = 0
     text_buffer = ""
-    threadLock = threading.Lock()
+    
+    def __init__(self) -> None:
+        self.threadLock = threading.Lock()
+        pass
 
     def deposit(self, text, entry):
         with self.threadLock:
@@ -33,37 +58,15 @@ class EmotionsBank:
             self.emotions_average["Fear"] = (
                 self.emotions_average["Fear"] + entry["Fear"]
             )
+            self.dispatch(self.text_buffer,self.emotions_average)
 
-    def print(self):
-        print("Number of Threads ",threading.active_count() )
-        print(self.text_buffer)
-        print(self.emotions_average)
-
-
-class EmotionsEngine:
-    item_queue = queue.Queue()
-    active = False
-    bank = EmotionsBank()
-
-    def stop(self):
-        self.active = False
-
-    def run(self):
-        self.active = True
-        self.worker = threading.Thread(target=self.__process_in_background)
-        self.worker.start()
+class EmotionsEngine():
+    def __init__(self) -> None:
+        self.bank = EmotionsBank()       
 
     def process_text(self, result):
-        self.item_queue.put(result)
-
-    def __process_in_background(self):
-        while self.active:
-            sleep(5)
-            if self.item_queue.empty():
-                continue
-            text = self.item_queue.get()
-            emotion_results = te.get_emotion(text)
-            self.bank.deposit(text, emotion_results)
+        emotion_results = te.get_emotion(result)
+        self.bank.deposit(result, emotion_results)
 
 # global data instance
 engine = EmotionsEngine()
