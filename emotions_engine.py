@@ -1,3 +1,4 @@
+import logging
 import queue
 import threading
 import sys
@@ -6,7 +7,7 @@ from time import sleep
 
 class EngineObserver:
     def __init__(self, name):
-        print("New Subscriber is getting created " + name)
+        logging.debug("New Subscriber is getting created " + name)
         self.name = name
     def update(self, message,emotions):
         pass
@@ -17,7 +18,7 @@ class EnginePublisher:
         pass
 
     def register(self, who):
-        print("Registering Observer ")
+        logging.debug("Registering Observer ")
         self.subscribers.append(who)
     def unregister(self, who):
         self.subscribers.remove(who)
@@ -59,6 +60,7 @@ class EmotionsBank (EnginePublisher):
                 self.emotions_average["Fear"] + entry["Fear"]
             )
             self.dispatch(self.text_buffer,self.emotions_average)
+            logging.debug("Adding Text to Bank" + text)
 
 class EmotionsEngine():
     def __init__(self) -> None:

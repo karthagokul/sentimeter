@@ -1,3 +1,4 @@
+import logging
 from intelli_speech import IntelliSpeech
 import emotions_engine
 from emotions_engine import EmotionsEngine
@@ -16,6 +17,7 @@ class Sentimeter:
         # Add a protection mechanism to avoid recreation
         ui = SentimeterUI()
         emotions_engine.engine.bank.register(ui)
+        logging.debug("Adding UI as observer to Engine")
 
     def process_text(self, text_data):
         self.setup_ui()
@@ -31,14 +33,14 @@ class Sentimeter:
 
     def start_listening(self):
         if self.active:
-            print("Another Listening is Ongoing")
-            return 
+            logging.fatal("The Engine is already active")
+            exit(-1) 
         self.setup_ui()
         self.listener.listen()        
         
 
     def stop(self):
-        print("Stopping Sentimeter")
+        logging.info("Stopping Sentimeter")
         if self.active:
             self.active = False
             self.listener.stop()

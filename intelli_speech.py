@@ -1,3 +1,4 @@
+import logging
 import speech_recognition as sr
 import os
 from threading import Thread
@@ -20,10 +21,13 @@ class IntelliSpeech:
                 audio_data, language=self.lang, show_all=True
             )
         except sr.UnknownValueError:
-            print("Google Speech Recognition could not understand audio")
+            logging.fatal("Google Speech Recognition could not understand audio")
+            exit(-1)
         except sr.RequestError as e:
-            print("Error service; {0}".format(e))
+            logging.fatal("Error service; {0}".format(e))
+            exit(-1)
         if len(actual_result) == 0:
+            logging.debug("Unable to get the Speech to Text,Ignoring")
             return False
 
         # Lets get the best text
@@ -83,5 +87,6 @@ class IntelliSpeech:
         self.stop()
 
     def stop(self):
+        logging.debug("Stopping Intellispeech")
         for process in self.threads:
             process.join()
