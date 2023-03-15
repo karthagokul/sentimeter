@@ -5,8 +5,10 @@ from rich.console import Console
 from rich.text import Text
 from rich.table import Table, Column
 from rich.live import Live
+from emotions_engine import EngineObserver
 
-class SentimeterUI:
+
+class SentimeterUI(EngineObserver):
     console = Console()
     console.set_alt_screen(True)
     console.clear()
@@ -22,6 +24,7 @@ class SentimeterUI:
     emotions_panel_fear=Panel('',title="Fear")
 
     def __init__(self) -> None:
+        super().__init__("UI")
         self.emotions_panel_layout.split_row(
         self.emotions_panel_happy,
         self.emotions_panel_angry,
@@ -38,6 +41,10 @@ class SentimeterUI:
         self.log_panel.title="Transcript"
         self.emotions_panel.title= "Emotions"
     
+    def update(self,message,emotions):
+        self.update_emotions(emotions)
+        self.update_transcript(message)
+        
     def update_emotions(self,emotion_map):
         #Lets find percentage
         total_emotions=sum(emotion_map.values())
@@ -50,7 +57,7 @@ class SentimeterUI:
         self.emotions_panel_surprise.renderable=str(((emotion_map["Surprise"]/total_emotions)*100)) + " %"
 
     def update_transcript(self,transctipt):
-        self.log_panel.renderable=transctipt
+        self.log_panel.renderable= transctipt
 
     def __del(self):
         self.console.clear()
