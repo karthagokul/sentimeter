@@ -1,24 +1,38 @@
+"""
+IntelliAudio Class who proces live speech Audio Data file , Todo : May be split the class?
+"""
+
 import logging
 import speech_recognition as sr
 import os
 from threading import Thread
+from queue import Queue
 import emotions_engine
 import os 
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
+from time import sleep
 
-class IntelliSpeech:
-    
-    def __init__(self) -> None:
-        self.recognizer = sr.Recognizer()
-        self.entries = []
+class STTRunner(Thread):
+    """Threaded Speech to Text Grab"""
+    def __init__(self, recognizer):
+        Thread.__init__(self)
+        self.recognizer=recognizer
         self.lang = "en-IN"
-        self.threads = []
+        self.queue=Queue()
 
-    def speech_to_text(self, audio_data):
+    def put_data(self,audio_data):
+        self.queue.put(audio_data)
+
+    def run(self):
+        while True:
+            audiodata = self.queue.get()
+            self.speech_to_text(audiodata)
+
+    def speech_to_text(self,audiodata):
         try:
             actual_result = self.recognizer.recognize_google(
-                audio_data, language=self.lang, show_all=True
+                audiodata, language=self.lang, show_all=True
             )
         except sr.UnknownValueError:
             logging.fatal("Google Speech Recognition could not understand audio")
@@ -44,7 +58,15 @@ class IntelliSpeech:
         emotions_engine.engine.process_text(result)
         return True
 
+class IntelliAudio:
+    
+    def __init__(self) -> None:
+        self.recognizer = sr.Recognizer()
+        self.entries = []
+        self.sttrunner = STTRunner(self.recognizer)
+
     def process_audio_file(self,path):
+        self.sttrunner.start()
         # open the audio file using pydub
         sound = AudioSegment.from_wav(path)  
         # split audio sound where silence is 700 miliseconds or more and get chunks
@@ -69,24 +91,23 @@ class IntelliSpeech:
             audio_chunk.export(chunk_filename, format="wav")
             # recognize the chunk
             with sr.AudioFile(chunk_filename) as source:
-                audio_listened = self.recognizer.record(source)
-                self.speech_to_text(audio_listened)
+                audio_data = self.recognizer.record(source)
+                self.sttrunner.put_data(audio_data)     
 
         return True
 
     def listen(self):
+        self.sttrunner.start()
         while True:
             with sr.Microphone() as source:
                 # read the audio data from the default microphone
                 audio_data = self.recognizer.record(source, duration=5)
-                process = Thread(target=self.speech_to_text, args=[audio_data])
-                process.start()
-                self.threads.append(process)
+                self.sttrunner.put_data(audio_data)                
 
     def __del__(self):
         self.stop()
 
     def stop(self):
-        logging.debug("Stopping Intellispeech")
-        for process in self.threads:
-            process.join()
+        logging.debug("Stopping IntelliAudio")
+        if not self.sttrunner.is_alive:
+            self.sttrunner.join(1)

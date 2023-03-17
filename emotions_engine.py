@@ -1,3 +1,7 @@
+"""
+Class Description
+"""
+
 import logging
 import queue
 import threading
@@ -5,7 +9,9 @@ import sys
 import text2emotion as te
 from time import sleep
 
+
 class EngineObserver:
+    """Class docstrings go here."""
     def __init__(self, name):
         logging.debug("New Subscriber is getting created " + name)
         self.name = name
@@ -13,6 +19,7 @@ class EngineObserver:
         pass
 
 class EnginePublisher:
+    """Class docstrings go here."""
     subscribers=[]
     def __init__(self):
         pass
@@ -29,6 +36,7 @@ class EnginePublisher:
 
 
 class EmotionsBank (EnginePublisher):
+    """Class docstrings go here."""
     emotions_counter = 0
     emotions_average = {}
     emotions_average["Happy"] = 0
@@ -39,13 +47,15 @@ class EmotionsBank (EnginePublisher):
     text_buffer = ""
     
     def __init__(self) -> None:
+        """Class method docstrings go here."""
         self.threadLock = threading.Lock()
         pass
 
     def deposit(self, text, entry):
+        """Class method docstrings go here."""
         with self.threadLock:
             self.emotions_counter += 1
-            self.text_buffer +=" " +text 
+            self.text_buffer = text 
             self.emotions_average["Happy"] = (
                 self.emotions_average["Happy"] + entry["Happy"]
             )
@@ -64,9 +74,11 @@ class EmotionsBank (EnginePublisher):
 
 class EmotionsEngine():
     def __init__(self) -> None:
+        """Class method docstrings go here."""
         self.bank = EmotionsBank()       
 
     def process_text(self, result):
+        """Class method docstrings go here."""
         emotion_results = te.get_emotion(result)
         self.bank.deposit(result, emotion_results)
 

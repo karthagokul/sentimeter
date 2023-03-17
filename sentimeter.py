@@ -1,13 +1,17 @@
+"""
+Class Description
+"""
 import logging
-from intelli_speech import IntelliSpeech
+from intelli_audio import IntelliAudio
 import emotions_engine
 from emotions_engine import EmotionsEngine
 from threading import Thread
 from time import sleep
-from sentimeter_ui import SentimeterUI
+#from sentimeter_ui import SentimeterUI
+from simple_ui import SentimeterSimpleUI
 
 class Sentimeter:
-    listener = IntelliSpeech()
+    listener = IntelliAudio()
     active = False
     
     def __init__(self) -> None:
@@ -15,7 +19,10 @@ class Sentimeter:
 
     def setup_ui(self):
         # Add a protection mechanism to avoid recreation
-        ui = SentimeterUI()
+        #ui = SentimeterUI()
+        #emotions_engine.engine.bank.register(ui)
+        #Simple UI looks better for development
+        ui= SentimeterSimpleUI()
         emotions_engine.engine.bank.register(ui)
         logging.debug("Adding UI as observer to Engine")
 
@@ -42,5 +49,4 @@ class Sentimeter:
     def stop(self):
         logging.info("Stopping Sentimeter")
         if self.active:
-            self.active = False
             self.listener.stop()
