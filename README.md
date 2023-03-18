@@ -15,7 +15,7 @@ Reading the Emotions From Text / Youtube video or live speech
 * Convert the Observer Pattern through Decorator
 
 ![Alt text](classes_sentimeter.png?raw=true "Design")
-  
+![Alt text](packages_sentimeter.png?raw=true "Design") 
 
 ## Setup
 
