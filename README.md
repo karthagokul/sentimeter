@@ -14,6 +14,7 @@ Reading the Emotions From Text / Youtube video or live speech
 * Google Hangout Connector
 * Convert the Observer Pattern through Decorator
 
+![Alt text](packages_sentimeter.png?raw=true "Design")
   
 
 ## Setup
@@ -23,3 +24,5 @@ py -m venv virtual-env
 .\virtual-env\Scripts\activate
 
 pip install -r requirements.txt
+
+pyreverse -o png -p sentimeter .
