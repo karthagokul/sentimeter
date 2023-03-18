@@ -1,46 +1,50 @@
 import logging
-from intelli_speech import IntelliSpeech
-import emotions_engine
-from emotions_engine import EmotionsEngine
-from threading import Thread
+from intelli_audio import IntelliAudio
 from time import sleep
-from sentimeter_ui import SentimeterUI
+from user_interfaces import SentimeterSimpleUI
+# from user_interfaces import SentimeterUI
+
 
 class Sentimeter:
-    listener = IntelliSpeech()
-    active = False
-    
+    '''
+    The Application class
+    '''
+    listener = IntelliAudio()
+
     def __init__(self) -> None:
+        '''Constructor'''
         pass
 
-    def setup_ui(self):
-        # Add a protection mechanism to avoid recreation
-        ui = SentimeterUI()
-        emotions_engine.engine.bank.register(ui)
-        logging.debug("Adding UI as observer to Engine")
-
     def process_text(self, text_data):
-        self.setup_ui()
+        '''
+        Process Given Text data
+        '''
         pass
 
     def process_text_file(self, file_name):
-        self.setup_ui()
+        '''
+        Process a Text file
+        '''
+        # ui=SentimeterUI()
         pass
 
-    def process_audio_file(self,file_name):
-        self.setup_ui()
+    def process_audio_file(self, file_name):
+        '''
+        Process Audio File
+        '''
+        ui = SentimeterSimpleUI("AudioProcessingUI")
         self.listener.process_audio_file(file_name)
 
     def start_listening(self):
-        if self.active:
-            logging.fatal("The Engine is already active")
-            exit(-1) 
-        self.setup_ui()
-        self.listener.listen()        
-        
+        '''
+        Process Live Speech from Microphone
+        '''
+        # ui=SentimeterUI()
+        return self.listener.listen()
 
     def stop(self):
-        logging.info("Stopping Sentimeter")
-        if self.active:
-            self.active = False
-            self.listener.stop()
+        '''
+        Stops Engine
+        '''
+        self.listener.stop()
+        return
