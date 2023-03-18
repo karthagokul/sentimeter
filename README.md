@@ -3,7 +3,6 @@
 
 Reading the Emotions From Text / Youtube video or live speech
 
-  
 
 ## Usage
 
@@ -11,8 +10,9 @@ Reading the Emotions From Text / Youtube video or live speech
     python main.py --audio_file <path  to  the  audio  file> to use as source
 
 ## Todo
-Documentation
-Feature enhancements etc
+* Documentation
+* Google Hangout Connector
+* Convert the Observer Pattern through Decorator
 
   
 

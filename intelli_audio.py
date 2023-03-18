@@ -13,23 +13,23 @@ from pydub import AudioSegment
 from pydub.silence import split_on_silence
 from time import sleep
 
-class STTRunner(Thread):
-    """Threaded Speech to Text Grab"""
-    def __init__(self, recognizer):
-        Thread.__init__(self)
+class STTEngine:
+    '''
+    Speech to Text Engine, Currently using Google Service, Options to be added for Sphinix
+    '''
+
+    def __init__(self,recognizer) -> None:
+        '''
+        constructor
+        '''
         self.recognizer=recognizer
         self.lang = "en-IN"
-        self.queue=Queue()
-
-    def put_data(self,audio_data):
-        self.queue.put(audio_data)
-
-    def run(self):
-        while True:
-            audiodata = self.queue.get()
-            self.speech_to_text(audiodata)
-
+        pass
+    
     def speech_to_text(self,audiodata):
+        '''
+        function to get the text for inputed audio data
+        '''
         try:
             actual_result = self.recognizer.recognize_google(
                 audiodata, language=self.lang, show_all=True
@@ -42,7 +42,7 @@ class STTRunner(Thread):
             exit(-1)
         if len(actual_result) == 0:
             logging.debug("Unable to get the Speech to Text,Ignoring")
-            return False
+            return ""
 
         # Lets get the best text
         if "confidence" in actual_result["alternative"]:
@@ -55,28 +55,65 @@ class STTRunner(Thread):
             # when there is no confidence available, we arbitrarily choose the first hypothesis.
             best_hypothesis = actual_result["alternative"][0]
         result = best_hypothesis["transcript"]
-        emotions_engine.engine.process_text(result)
+        return result
+
+class STTLiveTranscoder(Thread):
+    '''
+    Threaded implementation to handle live audio with a processing FIFO
+    '''
+    def __init__(self, backend):
+        '''
+        Constructor
+        '''
+        Thread.__init__(self)
+        self.backend=backend
+        self.queue=Queue()
+        self.text=""
+
+    def put_data(self,audio_data):
+        '''
+        Adds the audio data to processing queue
+        '''
+        self.queue.put(audio_data)
+
+    def run(self):
+        '''
+        Runner
+        '''
+        while True:
+            audiodata = self.queue.get()
+            result=self.backend.speech_to_text(audiodata)
+            emotions_engine.engine.process_text(result)
         return True
 
 class IntelliAudio:
-    
+    '''
+    Classs Abstracts Audio Related features
+    '''
     def __init__(self) -> None:
+        '''
+        Constructor
+        '''
         self.recognizer = sr.Recognizer()
         self.entries = []
-        self.sttrunner = STTRunner(self.recognizer)
+        self.backend=STTEngine(self.recognizer)
+        self.sttrunner = STTLiveTranscoder(self.backend)
 
     def process_audio_file(self,path):
-        self.sttrunner.start()
+        ''' For now only supports Wav
+        '''
+        transcription=""
+        logging.info("Processing Audio File " + path)
         # open the audio file using pydub
         sound = AudioSegment.from_wav(path)  
-        # split audio sound where silence is 700 miliseconds or more and get chunks
+        # split audio sound where silence is 1000 miliseconds or more and get chunks
         chunks = split_on_silence(sound,
             # experiment with this value for your target audio file
-            min_silence_len = 500,
+            min_silence_len = 1000,
             # adjust this per requirement
             silence_thresh = sound.dBFS-14,
             # keep the silence for 1 second, adjustable as well
-            keep_silence=500,
+            keep_silence=1000,
         )
         folder_name = "audio-chunks"
         # create a directory to store the audio chunks
@@ -91,12 +128,15 @@ class IntelliAudio:
             audio_chunk.export(chunk_filename, format="wav")
             # recognize the chunk
             with sr.AudioFile(chunk_filename) as source:
-                audio_data = self.recognizer.record(source)
-                self.sttrunner.put_data(audio_data)     
-
+                audio_data = self.recognizer.record(source)  
+                transcription+=" " + self.backend.speech_to_text(audio_data)
+        emotions_engine.engine.process_text(transcription)
         return True
 
     def listen(self):
+        '''
+        Process Microphone
+        '''
         self.sttrunner.start()
         while True:
             with sr.Microphone() as source:
@@ -108,6 +148,9 @@ class IntelliAudio:
         self.stop()
 
     def stop(self):
+        '''
+        Routines to stop the Engine
+        '''
         logging.debug("Stopping IntelliAudio")
         if not self.sttrunner.is_alive:
             self.sttrunner.join(1)
