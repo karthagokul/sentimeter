@@ -25,6 +25,7 @@ class EmotionsEngine():
     '''
     The class responsible to identify the emotions of a given text
     '''
+
     def __init__(self) -> None:
         '''
         constructor , the object acts as singleton
