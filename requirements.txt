@@ -28,6 +28,7 @@ PyAudio==0.2.13
 pycodestyle==2.10.0
 pycryptodomex==3.17
 pydub==0.25.1
+pyflakes==3.0.1
 Pygments==2.14.0
 pyjsparser==2.7.1
 PyQt6==6.4.2

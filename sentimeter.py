@@ -33,7 +33,7 @@ logging.basicConfig(
 )
 @click.option("--audio_file", help="Process Audio File")
 @click.option("--text_file", help="File to Process")
-def main(live, telegrambot, text, audio_file, text_file):
+def main(live, telegrambot, audio_file, text_file):
     """The Main function which process the user commands to start the respective modules"""
     global app
     global module
