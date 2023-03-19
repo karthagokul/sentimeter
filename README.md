@@ -21,8 +21,7 @@ Under Development
 
  - Documentation
  - Google Hangout Connector 
- - Convert the Observer Pattern through Decorator 
- - Qt6 GUI integration
+ - Convert the Observer Pattern through Decorator
 
 #### Class Diagram
 ![Alt text](classes_sentimeter.png?raw=true  "Design")
