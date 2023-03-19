@@ -1,4 +1,5 @@
 
+from emotions_engine import SentiMeterModule
 import emotions_engine
 import telebot
 import os
@@ -37,16 +38,27 @@ class TelebotResponder():
         bot.reply_to(self.message, text)
 
 
-@bot.message_handler(func=lambda msg: True)
-def echo_all(message):
-    print(message.text)
-    t = TelebotResponder(bot, message)
-    emotions_engine.engine.bank.register(t)
-    emotions_engine.engine.process_text(message.text)
-    emotions_engine.engine.bank.unregister(t)
-    del t
+class TelegramModule(SentiMeterModule):
 
+    def __init__(self) -> None:
+        super().__init__()
+        pass
 
-# Currentl running as seperate app , need to integrate
-if __name__ == "__main__":
-    bot.infinity_polling()
+    def start(self):
+        super().start()
+        bot.infinity_polling()
+        pass
+
+    def stop(self):
+        super().start()
+        bot.stop()
+        pass
+
+    @bot.message_handler(func=lambda msg: True)
+    def echo_all(message):
+        print(message.text)
+        t = TelebotResponder(bot, message)
+        emotions_engine.engine.bank.register(t)
+        emotions_engine.engine.process_text(message.text)
+        emotions_engine.engine.bank.unregister(t)
+        del t
