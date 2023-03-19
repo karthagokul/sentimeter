@@ -7,6 +7,7 @@ Application Main
 
 import logging
 from modules import LiveSpeechModule, TelegramModule, AudioModule, TextFileModule
+from core import SentimeterSimpleUI, SentiMeterGUI
 import signal
 import sys
 import click
@@ -31,9 +32,14 @@ logging.basicConfig(
     default=False,
     help="Application in Acting as a Telegram Bot",
 )
+@click.option(
+    "--nogui",
+    is_flag=True,
+    help="Application in Acting as a Telegram Bot",
+)
 @click.option("--audio_file", help="Process Audio File")
 @click.option("--text_file", help="File to Process")
-def main(live, telegrambot, audio_file, text_file):
+def main(live, telegrambot, nogui, audio_file, text_file):
     """The Main function which process the user commands to start the respective modules"""
     global app
     global module
@@ -43,16 +49,21 @@ def main(live, telegrambot, audio_file, text_file):
     if live == True:
         logging.info("Started Listening Mode")
         module = LiveSpeechModule()
-    elif audio_file != None:
+    if audio_file != None:
         logging.info("Process audio file")
         module = AudioModule(audio_file)
-    elif text_file != None:
+    if text_file != None:
         logging.info("Process text file")
         module = TextFileModule(text_file)
     else:
         logging.fatal("Unable to Recognize")
     if module != None:
-        module.start()
+        if nogui == False:
+            qt_gui = SentiMeterGUI()
+            qt_gui.start(module)
+        else:
+            simple_ui = SentimeterSimpleUI()
+            module.start()
     return
 
 

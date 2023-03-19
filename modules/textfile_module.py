@@ -8,14 +8,12 @@ Module to Process a texfile
 import core.emotions_engine as emotions_engine
 from core.emotions_engine import EngineObserver
 from core.emotions_engine import SentiMeterModule
-from core.user_interfaces import SentimeterSimpleUI
 
 
 class TextFileModule(SentiMeterModule):
     def __init__(self, path) -> None:
         super().__init__()
         self.path = path
-        self.user_interface = SentimeterSimpleUI("Text UI")
 
     def start(self):
         super().start()
