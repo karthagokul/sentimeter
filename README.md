@@ -35,10 +35,16 @@ Under Development
 
 ## Setup
 
+Virtual env
 py -m venv virtual-env
 
 .\virtual-env\Scripts\activate
 
+install deps
 pip install -r requirements.txt
 
+generate docs
 pyreverse -o png -p sentimeter .
+
+Look at the unwanted imports
+pyflakes core
