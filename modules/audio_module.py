@@ -11,7 +11,7 @@ from pydub.silence import split_on_silence
 import speech_recognition as sr
 import core.emotions_engine as emotions_engine
 from core.emotions_engine import SentiMeterModule
-from core.user_interfaces import SentimeterSimpleUI
+
 from core.sttengine import STTEngine
 
 
@@ -29,7 +29,6 @@ class AudioModule(SentiMeterModule):
         self.recognizer = sr.Recognizer()
         self.backend = STTEngine(self.recognizer)
         self.path = path
-        self.user_interface = SentimeterSimpleUI("Audio UI")
 
     def start(self):
         super().start()

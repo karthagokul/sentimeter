@@ -12,7 +12,6 @@ import speech_recognition as sr
 import core.emotions_engine as emotions_engine
 from core.emotions_engine import SentiMeterModule
 from core.sttengine import STTEngine
-from core.user_interfaces import SentimeterSimpleUI
 
 
 class STTLiveTranscoder(Thread):
