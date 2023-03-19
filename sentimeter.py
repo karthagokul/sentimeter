@@ -6,7 +6,7 @@ Application Main
 """
 
 import logging
-from modules import LiveSpeechModule, TelegramModule, AudioModule
+from modules import LiveSpeechModule, TelegramModule, AudioModule, TextFileModule
 import signal
 import sys
 import click
@@ -48,6 +48,7 @@ def main(live, telegrambot, audio_file, text_file):
         module = AudioModule(audio_file)
     elif text_file != None:
         logging.info("Process text file")
+        module = TextFileModule(text_file)
     else:
         logging.fatal("Unable to Recognize")
     if module != None:
