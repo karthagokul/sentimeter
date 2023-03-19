@@ -27,13 +27,13 @@ Under Development
  The application has a Qt Based GUI like below , You see the results of "Tanenbaum–Torvalds debate" :)
 ![Alt text](gui.png?raw=true  "Design")
 
-#### Class Diagram
+## Class Diagram
 ![Alt text](classes_sentimeter.png?raw=true  "Design")
 
-#### Package Diagram
+## Package Diagram
 ![Alt text](packages_sentimeter.png?raw=true  "Design")
 
-### Setup
+## Setup
 Create a Virtual env
 
     py -m venv virtual-env
@@ -45,6 +45,6 @@ Install All Dependencies
 
 #### Developer Notes
 generate docs
-pyreverse -o png -p sentimeter 
+pyreverse -o png -p sentimeter .
 Look at the unwanted imports
 pyflakes core
