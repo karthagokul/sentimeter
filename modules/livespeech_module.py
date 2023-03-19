@@ -6,9 +6,9 @@ IntelliAudio Class who proces live speech Audio Data file , Todo : May be split 
 """
 
 import logging
-import speech_recognition as sr
 from threading import Thread
 from queue import Queue
+import speech_recognition as sr
 import core.emotions_engine as emotions_engine
 from core.emotions_engine import SentiMeterModule
 from core.sttengine import STTEngine
@@ -27,7 +27,7 @@ class STTLiveTranscoder(Thread):
         Thread.__init__(self)
         self.backend = backend
         self.queue = Queue()
-        self.ui = SentimeterSimpleUI("Live UI")
+        self.user_interface = SentimeterSimpleUI("Live UI")
 
     def put_data(self, audio_data):
         """

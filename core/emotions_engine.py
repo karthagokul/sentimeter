@@ -7,6 +7,7 @@ The Core Engine
 
 import text2emotion as te
 
+
 class SentiMeterModule:
     """
     The base class for all modules to encapsulate the commonality

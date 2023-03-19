@@ -62,17 +62,14 @@ class TelebotResponder(EngineObserver):
 class TelegramModule(SentiMeterModule):
     def __init__(self) -> None:
         super().__init__()
-        pass
 
     def start(self):
         super().start()
         bot.infinity_polling()
-        pass
 
     def stop(self):
         super().start()
         bot.stop()
-        pass
 
     @bot.message_handler(func=lambda msg: True)
     def echo_all(message):

@@ -4,15 +4,15 @@
 """
 Module for processing offline Audiofile
 """
-import core.emotions_engine as emotions_engine
-from core.emotions_engine import SentiMeterModule
-from pydub import AudioSegment
-from pydub.silence import split_on_silence
-from core.sttengine import STTEngine
 import os
 import logging
+from pydub import AudioSegment
+from pydub.silence import split_on_silence
 import speech_recognition as sr
+import core.emotions_engine as emotions_engine
+from core.emotions_engine import SentiMeterModule
 from core.user_interfaces import SentimeterSimpleUI
+from core.sttengine import STTEngine
 
 
 class AudioModule(SentiMeterModule):
@@ -29,12 +29,12 @@ class AudioModule(SentiMeterModule):
         self.recognizer = sr.Recognizer()
         self.backend = STTEngine(self.recognizer)
         self.path = path
-        self.ui = SentimeterSimpleUI("Audio UI")
+        self.user_interface = SentimeterSimpleUI("Audio UI")
 
     def start(self):
         super().start()
         transcription = ""
-        logging.info("Processing Audio File " + self.path)
+        logging.info("Processing Audio File %s", self.path)
         # open the audio file using pydub
         sound = AudioSegment.from_wav(self.path)
         # split audio sound where silence is 1000 miliseconds or more and get chunks
@@ -70,7 +70,4 @@ class AudioModule(SentiMeterModule):
         """
         super().stop()
         logging.debug("Stopping IntelliAudio")
-        if not self.sttrunner.is_alive:
-            self.sttrunner.join(1)
-
         return True
