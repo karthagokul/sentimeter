@@ -7,17 +7,11 @@ IntelliAudio Class who proces live speech Audio Data file , Todo : May be split 
 
 import logging
 import speech_recognition as sr
-import os
 from threading import Thread
 from queue import Queue
 import core.emotions_engine as emotions_engine
-import os
-from pydub import AudioSegment
-from pydub.silence import split_on_silence
-from time import sleep
 from core.emotions_engine import SentiMeterModule
 from core.sttengine import STTEngine
-import core.emotions_engine
 from core.user_interfaces import SentimeterSimpleUI
 
 

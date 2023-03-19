@@ -5,12 +5,13 @@
 The Core Engine
 """
 
-import logging
 import text2emotion as te
-from time import sleep
-
 
 class SentiMeterModule:
+    """
+    The base class for all modules to encapsulate the commonality
+    """
+
     def __init__(self) -> None:
         self.active = False
 

@@ -9,12 +9,8 @@ from core.emotions_engine import SentiMeterModule
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
 from core.sttengine import STTEngine
-from threading import Thread
-from queue import Queue
-from time import sleep
 import os
 import logging
-import os
 import speech_recognition as sr
 from core.user_interfaces import SentimeterSimpleUI
 

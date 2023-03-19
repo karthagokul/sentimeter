@@ -4,19 +4,9 @@
 """
 Module to run as telegram bot
 """
-import logging
-import speech_recognition as sr
-from threading import Thread
-from queue import Queue
 import core.emotions_engine as emotions_engine
 from core.emotions_engine import EngineObserver
-from pydub import AudioSegment
-from pydub.silence import split_on_silence
-from time import sleep
 from core.emotions_engine import SentiMeterModule
-from core.sttengine import STTEngine
-import core.emotions_engine
-from core.user_interfaces import SentimeterSimpleUI
 import telebot
 import os
 
