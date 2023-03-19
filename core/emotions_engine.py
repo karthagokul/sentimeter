@@ -7,6 +7,22 @@ import text2emotion as te
 from time import sleep
 
 
+class SentiMeterModule:
+    def __init__(self) -> None:
+        self.active=False
+
+    def start(self):
+        self.active=True
+        return self.active
+
+    def stop(self):
+        self.active=False
+        return self.active
+
+    def is_active(self):
+        return self.active
+
+
 class EngineObserver:
     def __init__(self, name) -> None:
         '''
