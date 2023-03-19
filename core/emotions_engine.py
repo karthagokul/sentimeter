@@ -10,15 +10,14 @@ from time import sleep
 class SentiMeterModule:
     def __init__(self) -> None:
         self.active=False
-        pass
 
     def start(self):
         self.active=True
-        pass
+        return self.active
 
     def stop(self):
         self.active=False
-        pass
+        return self.active
 
     def is_active(self):
         return self.active

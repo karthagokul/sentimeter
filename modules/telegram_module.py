@@ -1,8 +1,19 @@
-
-from emotions_engine import SentiMeterModule
-import emotions_engine
+import logging
+import speech_recognition as sr
+from threading import Thread
+from queue import Queue
+import core.emotions_engine as emotions_engine
+from core.emotions_engine import EngineObserver
+from pydub import AudioSegment
+from pydub.silence import split_on_silence
+from time import sleep
+from core.emotions_engine import SentiMeterModule
+from core.sttengine import STTEngine
+import core.emotions_engine
+from core.user_interfaces import SentimeterSimpleUI
 import telebot
 import os
+
 BOT_TOKEN = os.environ.get('SENTI_TOKEN')
 bot = telebot.TeleBot(BOT_TOKEN)
 
@@ -13,12 +24,13 @@ EMOJI_SURPRISE = "\U0001F914  "
 EMOJI_ANGRY = "\U0001F620  "
 
 
-class TelebotResponder():
+class TelebotResponder(EngineObserver):
     def __init__(self, bot, message) -> None:
         self.message = message
+        super().__init__("Telegrambot")
+        emotions_engine.engine.add_observer(self)      
 
-    @emotions_engine.engine.register()
-    def update(self, message_text, emotion_map):
+    def on_event(self, message_text, emotion_map):
         global bot
         text = "| "
         total_emotions = sum(emotion_map.values())
@@ -58,7 +70,5 @@ class TelegramModule(SentiMeterModule):
     def echo_all(message):
         print(message.text)
         t = TelebotResponder(bot, message)
-        emotions_engine.engine.bank.register(t)
         emotions_engine.engine.process_text(message.text)
-        emotions_engine.engine.bank.unregister(t)
         del t

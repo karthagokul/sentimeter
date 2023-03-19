@@ -1,61 +1,13 @@
 import logging
-from intelli_audio import IntelliAudio
+from modules import LiveSpeechModule , TelegramModule , AudioModule
 import signal
 import sys
 import click
-from user_interfaces import SentimeterSimpleUI
-# from user_interfaces import SentimeterUI
 
 
-class Sentimeter:
-    '''
-    The Application class
-    '''
-    listener = IntelliAudio()
-
-    def __init__(self) -> None:
-        '''Constructor'''
-        pass
-
-    def process_text(self, text_data):
-        '''
-        Process Given Text data
-        '''
-        pass
-
-    def process_text_file(self, file_name):
-        '''
-        Process a Text file
-        '''
-        # ui=SentimeterUI()
-        pass
-
-    def process_audio_file(self, file_name):
-        '''
-        Process Audio File
-        '''
-        ui = SentimeterSimpleUI("AudioProcessingUI")
-        self.listener.process_audio_file(file_name)
-
-    def start_listening(self):
-        '''
-        Process Live Speech from Microphone
-        '''
-        # ui=SentimeterUI()
-        return self.listener.listen()
-
-    def stop(self):
-        '''
-        Stops Engine
-        '''
-        self.listener.stop()
-        return
-
-
-
+#Module Global Instance
+module=None
 logging.basicConfig(filename='app.log', filemode='w', level=logging.DEBUG, format='%(name)s - %(levelname)s - %(message)s')
-
-app = Sentimeter()
 
 @click.command()
 @click.option(
@@ -69,28 +21,35 @@ app = Sentimeter()
 @click.option("--text_file", help="File to Process")
 
 def main(live,telegrambot, text, audio_file, text_file):
+    '''The Main function which process the user commands to start the respective modules'''
     global app
+    global module
     if telegrambot == True:
         logging.info('Started Telegram Mode')
+        module=TelegramModule()
     if live == True:
         logging.info('Started Listening Mode')
-        app.start_listening()
+        module=LiveSpeechModule()  
     elif text != None:
         pass
-        #app.process_text(text)
     elif audio_file != None:
         logging.info("Process audio file")
-        app.process_audio_file(audio_file)
+        module=AudioModule(audio_file)  
     elif text_file != None:
         logging.info("Process text file")
     else:
         logging.fatal("Unable to Recognize")
+    if module !=None:
+        module.start()
     return
 
 def signal_handler(sig, frame):
-    #global app
+    ''' Need to capture the Control-C especially when any module is in live processing mode
+    '''
+    global module
     logging.info("Please wait, Let me cleanup")
-    app.stop()
+    if module.is_active:
+        module.stop()
     sys.exit(0)
 
 if __name__ == '__main__':
