@@ -4,7 +4,7 @@ import os
 sys.path.append("..\src")
 from sentimeter.sentimeter import Sentimeter
 from sentimeter.sources import TextSource
-from sentimeter.backends import AIRemoteBackend
+from sentimeter.chatgpt_backend import AIRemoteBackend
 
 CHATGPT_KEY = os.environ.get("OPENAI_KEY")
 
