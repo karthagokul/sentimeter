@@ -1,5 +1,5 @@
 # Sentimeter
-![Alt text](logo.png?raw=true  "Logo")
+![Alt text](https://github.com/karthagokul/sentimeter/blob/main/logo.png?raw=true  "Logo")
  
 Sentimeter is an app written in python to understand the emotions in audio / text. Currently it has the below modules
 
