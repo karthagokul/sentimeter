@@ -1,16 +1,18 @@
 import logging
 import os
+import json
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
 import speech_recognition as sr
-
 from sentimeter.sources import BaseSource
 from sentimeter.speech_to_text import STTEngine
 
-import json
-
 
 class AudioSource(BaseSource):
+    """Sentimeter source for audio files. Currently support only Wav file.
+    TODO: Integrate other formats
+    """
+
     def __init__(self, engine, path) -> None:
         super().__init__(engine)
         self.recognizer = sr.Recognizer()
@@ -18,6 +20,11 @@ class AudioSource(BaseSource):
         self.path = path
 
     def run(self):
+        # Protecting for .wav
+        if self.path.endswith(".wav") == False:
+            logging.critical("Unsupported audio format.")
+            return False
+
         transcription = ""
         logging.info("Processing Audio File %s", self.path)
         logging.info("Depending on the Size of Audio , The process takes some time, Have a coffee !")
@@ -53,6 +60,6 @@ class AudioSource(BaseSource):
         return True
 
     def on_event(self, results):
-        logging.info("Results in JSON follows")
+        logging.info("\n\n Results Summary \n\n")
         logging.info(json.dumps(results))
         pass

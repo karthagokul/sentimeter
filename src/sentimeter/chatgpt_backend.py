@@ -4,6 +4,10 @@ from sentimeter.backend import Basebackend
 
 
 class AIRemoteBackend(Basebackend):
+    """
+    Experimental ChatGPT backend
+    """
+
     def __init__(self, OPENAI_KEY) -> None:
         super().__init__("ChatGPT")
         self.openai = openai
@@ -16,10 +20,12 @@ class AIRemoteBackend(Basebackend):
         """
 
     def extract_valid_json(self, output):
+        """Chatgpt sometimes returns non json text, lets strip it"""
         res = output[output.index("{") : output.index("}") + 1]
         return res
 
     def process(self, text):
+        """Lets ask the badass !"""
         data = {}
         prompt_with_input = self.prompt + text
         completion = openai.Completion.create(
