@@ -16,6 +16,8 @@ CHATGPT_KEY = os.environ.get("OPENAI_KEY")
 
 
 class TelebotResponder(EngineObserver):
+    """Class which responds to a message with the emotions found in the message"""
+
     def __init__(self, engine, bot, message) -> None:
         self.message = message
         super().__init__("Telegrambot")
@@ -36,12 +38,16 @@ class TelebotResponder(EngineObserver):
 
 
 class SentimeterTelegramBot(BaseSource):
+    """Custom Telegram Source and register it with Engine"""
+
     def __init__(self, engine, bot_key) -> None:
         super().__init__(engine)
         self.bot = telebot.TeleBot(bot_key)
         self.engine = Sentimeter()
 
     def run(self):
+        """Runner"""
+
         @self.bot.message_handler(commands=["start"])
         def send_welcome(message):
             self.bot.reply_to(message, "Welcome to my bot!")
@@ -56,6 +62,7 @@ class SentimeterTelegramBot(BaseSource):
 
 
 def main():
+    """The main"""
     if len(sys.argv) < 2:
         logging.critical("Error : Bot KEY must be presented")
         sys.exit(-1)
@@ -66,6 +73,7 @@ def main():
 
 
 def signal_handler(sig, frame):
+    """for safe exit ctrl-c"""
     sys.exit(0)
 
 
