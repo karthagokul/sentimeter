@@ -1,24 +1,6 @@
-import text2emotion as te
 import json
 import openai
-
-
-class Basebackend:
-    def __init__(self, backend_name) -> None:
-        self.backend_name = backend_name
-
-    def process(self, text):
-        return {}
-
-
-class LocalBackend(Basebackend):
-    def __init__(self) -> None:
-        super().__init__("Local")
-
-    def process(self, text):
-        data = {}
-        data = te.get_emotion(text)
-        return data
+from sentimeter.backend import Basebackend
 
 
 class AIRemoteBackend(Basebackend):

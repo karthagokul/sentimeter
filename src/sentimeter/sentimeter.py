@@ -1,5 +1,5 @@
 import logging
-from sentimeter.backends import LocalBackend
+from sentimeter.local_backend import LocalBackend
 
 TEXT = "Text"
 

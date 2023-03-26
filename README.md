@@ -1,7 +1,8 @@
 # Sentimeter
 ![Alt text](https://github.com/karthagokul/sentimeter/blob/main/logo.png?raw=true  "Logo")
  
-Sentimeter is an app written in python to understand the emotions in audio / text. Currently it has the below modules
+Sentimeter is all about identifiying the sentiments from a source . The source can be a text / audio .
+Below are some of the built in modules shipping along with the package
 
 ### Audio Module
 Process the Emotions in a given audio file. Currently it supports only wav file . In future we will add more formats
@@ -14,16 +15,31 @@ Process a text file and identifies the emotions
 ### Youtube Video
 Under Development
 
+Incase if you would like to create own modules, you can do it by extending the BaseSource class  like below
+    class OwnSentimeterSource(BaseSource):
+        def __init__(self, engine) -> None:
+            super().__init__(engine)
+            pass
+
+        def run(self):
+            # The text is is the input to the engine
+            self.engine.process(text)
+            return True
+
+        def on_event(self, results):
+            # This overridden function will get you the results(map of emotions)
+            print(results)
+
+
+We can use multiple backends as well with this engine. I have created an experimental ChatGPT backend . But by default it uses a built in model to identify the emotions.
+
 ## Usage
-    python main.py --live to use live speech as source
-    python main.py --audio_file <path to the audio file> to use as source
+There are applications developed using sentimeter. Please refer apps folder in https://github.com/karthagokul/sentimeter
 
 ## Todo
-
  - Documentation
  - Google Hangout Connector 
- - Convert the Observer Pattern through Decorator
-
+ 
 ## Setup
 Create a Virtual env
 
@@ -32,10 +48,4 @@ Create a Virtual env
 
 Install All Dependencies
 
-    pip3 install -r requirements.txt
-
-#### Developer Notes
-generate docs
-pyreverse -o png -p sentimeter .
-Look at the unwanted imports
-pyflakes core
+    pip3 install .
