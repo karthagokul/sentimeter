@@ -1,0 +1,2 @@
+Upload
+twine upload -r sentimeter  dist\* --config-file "C:\Users\Gokul Kartha\.pypirc" --repository pypi

@@ -26,7 +26,8 @@ dependencies = [
     "PyQt6==6.4.2",
     "text2emotion==0.0.5",
     "openai==0.27.2",
-    "telebot"
+    "telebot",
+    "emoji==1.6.3"
 ]
 [project.optional-dependencies]
 spark = [
