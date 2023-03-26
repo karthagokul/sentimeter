@@ -1,5 +1,5 @@
-from pysentimeter.backends import LocalBackend, AIRemoteBackend, Basebackend
-from pysentimeter.engine_observer import EngineObserver
+from sentimeter.backends import LocalBackend, AIRemoteBackend, Basebackend
+from sentimeter.engine_observer import EngineObserver
 
 # HAPPY = "Happy"
 # SAD = "Sad"
@@ -18,9 +18,7 @@ class Sentimeter:
         self._enable_logging(logging.DEBUG)
 
     def _enable_logging(self, lev):
-        logging.basicConfig(
-            level=lev, format="[Sentimeter] [%(levelname)-5.5s]  %(message)s"
-        )
+        logging.basicConfig(level=lev, format="[Sentimeter] [%(levelname)-5.5s]  %(message)s")
 
     def set_backend(self, backend):
         self.backend = backend

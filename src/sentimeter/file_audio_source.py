@@ -5,8 +5,8 @@ from pydub import AudioSegment
 from pydub.silence import split_on_silence
 import speech_recognition as sr
 
-from pysentimeter.sources import BaseSource
-from pysentimeter.speech_to_text import STTEngine
+from sentimeter.sources import BaseSource
+from sentimeter.speech_to_text import STTEngine
 
 import json
 
@@ -21,9 +21,7 @@ class AudioSource(BaseSource):
     def run(self):
         transcription = ""
         logging.info("Processing Audio File %s", self.path)
-        logging.info(
-            "Depending on the Size of Audio , The process takes some time, Have a coffee !"
-        )
+        logging.info("Depending on the Size of Audio , The process takes some time, Have a coffee !")
         # open the audio file using pydub
         sound = AudioSegment.from_wav(self.path)
         # split audio sound where silence is 1000 miliseconds or more and get chunks

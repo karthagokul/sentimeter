@@ -1,9 +1,6 @@
 import text2emotion as te
 import json
-
-
 import openai
-import re
 
 
 class Basebackend:

@@ -1,4 +1,4 @@
-from pysentimeter.sentimeter import EngineObserver
+from sentimeter.sentimeter import EngineObserver
 
 
 class BaseSource(EngineObserver):
