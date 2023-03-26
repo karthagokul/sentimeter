@@ -5,7 +5,7 @@ class EngineObserver:
         """
         self.name = name
 
-    def on_event(self, result, results):
+    def on_event(self, results):
         """
         Observer Abstract Method
         """

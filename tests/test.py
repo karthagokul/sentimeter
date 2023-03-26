@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append("src")
 
 from unittest import TestCase
@@ -9,4 +10,4 @@ class Emailesting(TestCase):
         super().__init__(methodName)
 
     def test_1(self):
-        
+        pass

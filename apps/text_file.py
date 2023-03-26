@@ -3,9 +3,9 @@ import os
 
 sys.path.append("..\src")
 
-from pysentimeter.sentimeter import Sentimeter
-from pysentimeter.sources import TextSource
-from pysentimeter.backends import AIRemoteBackend
+from sentimeter.sentimeter import Sentimeter
+from sentimeter.sources import TextSource
+from sentimeter.backends import AIRemoteBackend
 
 CHATGPT_KEY = os.environ.get("OPENAI_KEY")
 

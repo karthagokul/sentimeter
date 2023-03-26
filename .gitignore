@@ -6,7 +6,7 @@ __pycache__/
 .audio-chunks
 # C extensions
 *.so
-
+.telegram
 # Distribution / packaging
 .Python
 build/

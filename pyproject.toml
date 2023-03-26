@@ -25,7 +25,8 @@ dependencies = [
     "SpeechRecognition==3.9.0",
     "PyQt6==6.4.2",
     "text2emotion==0.0.5",
-    "openai==0.27.2"
+    "openai==0.27.2",
+    "telebot"
 ]
 [project.optional-dependencies]
 spark = [
