@@ -16,6 +16,8 @@ Process a text file and identifies the emotions
 Under Development
 
 Incase if you would like to create own modules, you can do it by extending the BaseSource class  like below
+
+
     class OwnSentimeterSource(BaseSource):
         def __init__(self, engine) -> None:
             super().__init__(engine)
@@ -32,6 +34,13 @@ Incase if you would like to create own modules, you can do it by extending the B
 
 
 We can use multiple backends as well with this engine. I have created an experimental ChatGPT backend . But by default it uses a built in model to identify the emotions.
+
+
+## Class Diagram
+![Alt text](https://github.com/karthagokul/sentimeter/blob/main/classes_sentimeter.png?raw=true  "Class Diagram")
+
+## Package Diagram
+![Alt text](https://github.com/karthagokul/sentimeter/blob/main/packages_sentimeter.png?raw=true  "Packages")
 
 ## Usage
 There are applications developed using sentimeter. Please refer apps folder in https://github.com/karthagokul/sentimeter
