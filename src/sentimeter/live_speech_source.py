@@ -1,17 +1,10 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-IntelliAudio Class who proces live speech Audio Data file , Todo : May be split the class?
-"""
-
 import logging
+import json
+import speech_recognition as sr
+from sentimeter.sources import BaseSource
+from sentimeter.speech_to_text import STTEngine
 from threading import Thread
 from queue import Queue
-import speech_recognition as sr
-import core.emotions_engine as emotions_engine
-from core.emotions_engine import SentiMeterModule
-from core.sttengine import STTEngine
 
 
 class STTLiveTranscoder(Thread):
@@ -19,14 +12,14 @@ class STTLiveTranscoder(Thread):
     Threaded implementation to handle live audio with a processing FIFO
     """
 
-    def __init__(self, backend):
+    def __init__(self, backend, engine):
         """
         Constructor
         """
         Thread.__init__(self)
         self.backend = backend
+        self.engine = engine
         self.queue = Queue()
-        self.user_interface = SentimeterSimpleUI("Live UI")
 
     def put_data(self, audio_data):
         """
@@ -41,42 +34,31 @@ class STTLiveTranscoder(Thread):
         while True:
             audiodata = self.queue.get()
             result = self.backend.speech_to_text(audiodata)
-            emotions_engine.engine.process_text(result)
+            if result != "":
+                self.engine.process(result)
+            else:
+                logging.info("Skipping Silence")
         return True
 
 
-class LiveSpeechModule(SentiMeterModule):
-    """
-    Classs Abstracts Audio Related features
-    """
-
-    def __init__(self) -> None:
-        """
-        Constructor
-        """
-        super().__init__()
+class LiveSpeechSource(BaseSource):
+    def __init__(self, engine) -> None:
+        super().__init__(engine)
         self.recognizer = sr.Recognizer()
         self.entries = []
         self.backend = STTEngine(self.recognizer)
-        self.sttrunner = STTLiveTranscoder(self.backend)
+        self.sttrunner = STTLiveTranscoder(self.backend, engine)
 
-    def start(self):
-        """
-        Process Microphone
-        """
-        super().start()
+    def run(self):
         self.sttrunner.start()
         while True:
             with sr.Microphone() as source:
                 # read the audio data from the default microphone
                 audio_data = self.recognizer.record(source, duration=5)
                 self.sttrunner.put_data(audio_data)
+        return True
 
-    def stop(self):
-        """
-        Routines to stop the Engine
-        """
-        super().stop()
-        logging.debug("Stopping IntelliAudio")
-        if not self.sttrunner.is_alive:
-            self.sttrunner.join(1)
+    def on_event(self, results):
+        logging.info("Results in JSON follows")
+        logging.info(json.dumps(results))
+        pass

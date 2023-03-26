@@ -24,16 +24,6 @@ Under Development
  - Google Hangout Connector 
  - Convert the Observer Pattern through Decorator
 
-## GUI
- The application has a Qt Based GUI like below , You see the results of "Tanenbaum–Torvalds debate" :)
-![Alt text](gui.png?raw=true  "Design")
-
-## Class Diagram
-![Alt text](classes_sentimeter.png?raw=true  "Design")
-
-## Package Diagram
-![Alt text](packages_sentimeter.png?raw=true  "Design")
-
 ## Setup
 Create a Virtual env
 

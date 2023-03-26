@@ -1,39 +1,26 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-Module for processing offline Audiofile
-"""
-import os
 import logging
+import os
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
 import speech_recognition as sr
-import core.emotions_engine as emotions_engine
-from core.emotions_engine import SentiMeterModule
 
-from core.sttengine import STTEngine
+from sentimeter.sources import BaseSource
+from sentimeter.speech_to_text import STTEngine
+
+import json
 
 
-class AudioModule(SentiMeterModule):
-    """
-    Classs Abstracts Audio Related features
-    """
-
-    def __init__(self, path) -> None:
-        """
-        Constructor
-        path : location to a .wav file , in future we can add support for mp3 etc
-        """
-        super().__init__()
+class AudioSource(BaseSource):
+    def __init__(self, engine, path) -> None:
+        super().__init__(engine)
         self.recognizer = sr.Recognizer()
         self.backend = STTEngine(self.recognizer)
         self.path = path
 
-    def start(self):
-        super().start()
+    def run(self):
         transcription = ""
         logging.info("Processing Audio File %s", self.path)
+        logging.info("Depending on the Size of Audio , The process takes some time, Have a coffee !")
         # open the audio file using pydub
         sound = AudioSegment.from_wav(self.path)
         # split audio sound where silence is 1000 miliseconds or more and get chunks
@@ -46,7 +33,7 @@ class AudioModule(SentiMeterModule):
             # keep the silence for 1 second, adjustable as well
             keep_silence=1000,
         )
-        folder_name = "audio-chunks"
+        folder_name = ".audio-chunks"
         # create a directory to store the audio chunks
         if not os.path.isdir(folder_name):
             os.mkdir(folder_name)
@@ -60,13 +47,12 @@ class AudioModule(SentiMeterModule):
             with sr.AudioFile(chunk_filename) as source:
                 audio_data = self.recognizer.record(source)
                 transcription += " " + self.backend.speech_to_text(audio_data)
-        emotions_engine.engine.process_text(transcription)
+                logging.debug("Processed Audio Chunk %s" % chunk_filename)
+        logging.info("Finished Processing")
+        self.engine.process(transcription)
         return True
 
-    def stop(self):
-        """
-        Routines to stop the Engine
-        """
-        super().stop()
-        logging.debug("Stopping IntelliAudio")
-        return True
+    def on_event(self, results):
+        logging.info("Results in JSON follows")
+        logging.info(json.dumps(results))
+        pass
