@@ -1,8 +1,14 @@
 # Sentimeter
 ![Alt text](https://github.com/karthagokul/sentimeter/blob/main/logo.png?raw=true  "Logo")
- 
+
+The module is published in pypi (https://pypi.org/project/sentimeter/) . you can install it via
+
+    pip install sentimeter
+
+
+## Introduction
 Sentimeter is all about identifiying the sentiments from a source . The source can be a text / audio .
-Below are some of the built in modules shipping along with the package
+Below are some of the built in modules shipping along with the package .
 
 ### Audio Module
 Process the Emotions in a given audio file. Currently it supports only wav file . In future we will add more formats
