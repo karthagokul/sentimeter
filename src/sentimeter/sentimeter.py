@@ -1,14 +1,7 @@
-from sentimeter.backends import LocalBackend, AIRemoteBackend, Basebackend
-from sentimeter.engine_observer import EngineObserver
-
-# HAPPY = "Happy"
-# SAD = "Sad"
-# FEAR = "Fear"
-# ANGRY = "Angry"
-# SURPRISE = "Surprise"
-TEXT = "Text"
-
 import logging
+from sentimeter.backends import LocalBackend
+
+TEXT = "Text"
 
 
 class Sentimeter:

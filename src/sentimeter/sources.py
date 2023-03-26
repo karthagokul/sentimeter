@@ -23,18 +23,6 @@ class BaseSource(EngineObserver):
         pass
 
 
-class LiveSpeechSource(BaseSource):
-    def __init__(self, engine) -> None:
-        super().__init__(engine)
-        pass
-
-    def run(self):
-        return True
-
-    def on_event(self, results):
-        pass
-
-
 class TextSource(BaseSource):
     def __init__(self, engine) -> None:
         super().__init__(engine)

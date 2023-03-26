@@ -25,6 +25,7 @@ class STTEngine:
         """
         function to get the text for inputed audio data
         """
+        result = ""
         try:
             actual_result = self.recognizer.recognize_google(audiodata, language=self.lang, show_all=True)
         except sr.UnknownValueError:

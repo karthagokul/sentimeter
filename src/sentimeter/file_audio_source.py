@@ -1,6 +1,5 @@
 import logging
 import os
-import logging
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
 import speech_recognition as sr

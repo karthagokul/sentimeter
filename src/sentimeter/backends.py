@@ -29,8 +29,8 @@ class AIRemoteBackend(Basebackend):
         # Set up the model and prompt
         self.model_engine = "text-davinci-003"
         self.prompt = """
-        can you identify the levels of Happy, Sad , Fear, Angry and Surprise in the 
-        following test and share the result as json format?
+        can you identify the levels of Happy, Sad , Fear, Angry and Surprise in the
+         following test and share the result as json format?
         """
 
     def extract_valid_json(self, output):
@@ -55,6 +55,6 @@ class AIRemoteBackend(Basebackend):
         json_string = self.extract_valid_json(result)
         try:
             data = json.loads(json_string)
-        except ValueError as e:
+        except ValueError:
             data = {}
         return data

@@ -6,10 +6,10 @@ import signal
 import logging
 
 sys.path.append("..\src")
-
 from sentimeter.sentimeter import Sentimeter
 from sentimeter.file_audio_source import AudioSource
-from sentimeter.backends import AIRemoteBackend
+
+# from sentimeter.backends import AIRemoteBackend
 
 CHATGPT_KEY = os.environ.get("OPENAI_KEY")
 
@@ -19,8 +19,8 @@ def main():
         logging.critical("Error : Audio filename must be provided")
         sys.exit(-1)
     app = Sentimeter()
-    backend = AIRemoteBackend(CHATGPT_KEY)
-    app.set_backend(backend)
+    # backend = AIRemoteBackend(CHATGPT_KEY)
+    # app.set_backend(backend)
     audio_source = AudioSource(app, sys.argv[1])
     audio_source.run()
 

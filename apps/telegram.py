@@ -1,19 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import sys
-import os
 import signal
+import os
 import logging
 import telebot
-import json
-import os
-import logging
 
 sys.path.append("..\src")
-
 from sentimeter.sentimeter import Sentimeter
-from sentimeter.file_audio_source import AudioSource
-from sentimeter.backends import AIRemoteBackend
 from sentimeter.engine_observer import EngineObserver
 from sentimeter.sources import BaseSource
 
